@@ -10,7 +10,10 @@ from pypdf import PageObject, PaperSize, PdfReader, PdfWriter
 from rich import print
 
 # The CLI app
-app = typer.Typer(rich_markup_mode="rich")
+app = typer.Typer(rich_markup_mode="rich", add_completion=False)
+
+
+__version__ = "0.1.1"
 
 
 @dataclass
@@ -29,6 +32,12 @@ class PageLayout:
 
     def calculate_stave_height(self) -> float:
         return self.stave_height + self.bottom_padding + self.top_padding
+
+
+def version_callback(value: bool):
+    if value:
+        print(f"add-staves: {__version__}")
+        raise typer.Exit()
 
 
 def output_callback(ctx: typer.Context, input: Optional[Path]) -> Path:
@@ -237,6 +246,16 @@ def run(
             readable=True,
         ),
     ],
+    version: Annotated[
+        Optional[bool],
+        typer.Option(
+            "--version",
+            callback=version_callback,
+            is_eager=True,
+            show_default=False,
+            help="Show the current version number.",
+        ),
+    ] = None,
     # Options
     force: Annotated[
         bool,
