@@ -1,0 +1,24 @@
+[tool.poetry]
+name = "add_staves"
+version = "0.1.1"
+description = "Add empty staves for your analysis to your score."
+authors = ["Your Name <you@example.com>"]
+readme = "README.md"
+include = ["resources/*"]
+license = "MIT"
+
+[tool.poetry.scripts]
+add-staves = "add_staves.main:app"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+typer = "^0.9.0"
+pypdf = "^4.0.1"
+rich = "^13.7.0"
+
+[tool.black]
+line-length = 94
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
