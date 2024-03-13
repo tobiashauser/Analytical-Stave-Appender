@@ -19,7 +19,7 @@ terminal with:
 python --version
 ```
 
-If it isn't installed yet, you will be prompted to install it from the store.
+If it isn't installed yet, you will be prompted to install it from the Store.
 After the installation, pip will output a warning if its installation directory
 is not available in the global PATH. 
 
@@ -27,7 +27,7 @@ is not available in the global PATH.
 > I don't have access to a Windows machine.. I hope it works in most cases.
 
 <details>
-    <summary>Einen Pfad zu PATH hinzufügen</summary>
+    <summary>Adding a path to PATH</summary>
 <ol>
 <li><p>Open the Start menu and search for &#8220;Edit the system environment variables&#8221;, or type &#8220;Environment Variables&#8221; into the search bar and select &#8220;Edit the system environment variables&#8221; from the results.</p></li>
 <li><p>In the System Properties window, click on the &#8220;Environment Variables&#8230;&#8221; button.</p></li>
@@ -52,7 +52,7 @@ is not available in the global PATH.
 
 ### Briss
 
-Briss depends on a java runtime. When you open it you will be prompted to install it (if it's not already on your system).
+Briss depends on a Java runtime. When you open it you will be prompted to install it (if it's not already on your system).
 
 ## Usage
 
@@ -64,7 +64,7 @@ Further information about its usage can be found in its help: `add-staves --help
 
 ## Separate a score into systems
 
-You can use any program of your choice in order to seperate a score into systems.
+You can use any program of your choice in order to separate a score into systems.
 
 > [!Important] 
 > Make sure that each system or part you want to append analytical staves to,
@@ -81,7 +81,7 @@ pages and overlay them in the interface, so that you only have to declare
 the area to crop once and not on all pages. However, this doesn't work 
 particularly well for scores. This behaviour can be circumvented by passing 
 a range from the first to the last page (e.g. "1-4") to the dialog showing
-immediatly after loading a document.
+immediately after loading a document.
 
 #### Installation
 
@@ -96,5 +96,5 @@ For usage on Windows, an executable can be downloaded [here](https://sourceforge
 launch Briss. 
 
 > [!Note]
-> Briss needs a java runtime to be installed on the system. You will prompted to 
-> install it, if it doesn't exist.
+> Briss needs a Java runtime to be installed on the system. You will prompted to 
+> install it if it doesn't exist.
