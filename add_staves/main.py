@@ -28,6 +28,8 @@ class PageLayout:
     top_padding: int
     bottom_padding: int
     stave_height: float
+    ragged_bottom: bool
+    ragged_bottom_last: bool
     minimum_height: float = PaperSize.A4.height
 
     def calculate_stave_height(self) -> float:
@@ -160,20 +162,37 @@ def calculate_min_height(systems: List[PageObject], page_layout: PageLayout) -> 
 
 
 def layout_systems(
-    systems: List[PageObject], staves: PageObject, writer: PdfWriter, page_layout: PageLayout
+    systems: List[PageObject],
+    staves: PageObject,
+    writer: PdfWriter,
+    page_layout: PageLayout,
+    is_last_page: bool
 ):
     """
     Layout the systems with the empty staves on a new blank
     page in the writer.
 
     Dynamically adjust the paddings if the total space needed
-    is less than a DIN A4 page.
+    is less than a DIN A4 page as long as the flag `ragged_bottom`
+    is set.
+
+    Respect the flag `ragged_bottom_last` to not adjust the paddings
+    if set.
     """
     # minimum height necessary to layout all elements
     minimum_height = calculate_min_height(systems, page_layout)
 
     # flag to dynamically layout the elements
-    dynamic_layout = True if minimum_height < PaperSize.A4.height else False
+    # true if minimus_height is smaller and `ragged_bottom` is not set
+    dynamic_layout = True \
+    if minimum_height < PaperSize.A4.height and not page_layout.ragged_bottom \
+    else False
+
+    # Overwrite dynamic_layout in case it is the last page
+    if is_last_page:
+        dynamic_layout = True \
+        if minimum_height < PaperSize.A4.height and not page_layout.ragged_bottom_last \
+        else False
 
     # property height that represents the current level
     # to which the page is filled
@@ -349,6 +368,22 @@ def run(
             metavar="NUMBER",
         ),
     ] = 10,
+    ragged_bottom: Annotated[
+        bool,
+        typer.Option(
+            rich_help_panel="Page Layout",
+            help="If this is set, systems will be set at their natural spacing to fit the page.",
+            is_flag=True
+        )
+    ] = False,
+    ragged_bottom_last: Annotated[
+        bool,
+        typer.Option(
+            rich_help_panel="Page Layout",
+            help="If this is set, systems on the last page will be set at their natural spacing to fit the page.",
+            is_flag=True
+        )
+    ] = True,
 ):
     """
     Add analytical staves to a score.
@@ -382,11 +417,13 @@ def run(
 
     # create the PageLayout class
     page_layout = PageLayout(
-        top_margin,
-        bottom_margin,
-        top_padding,
-        bottom_padding,
-        staves.cropbox.height,
+        top_margin=top_margin,
+        bottom_margin=bottom_margin,
+        top_padding=top_padding,
+        bottom_padding=bottom_padding,
+        ragged_bottom=ragged_bottom,
+        ragged_bottom_last=ragged_bottom_last,
+        stave_height=staves.cropbox.height
     )
 
     # the PdfWriter to build the output file
@@ -419,8 +456,11 @@ def run(
     # keep track of the current system (= a page in the input score)
     current_system_number = 0
 
+    # the count of the groups
+    groups_count = len(groups)
+
     # Follow the groupings
-    for group in groups:
+    for index, group in enumerate(groups):
         # get all the systems for this group
         systems = [
             score.pages[index]
@@ -431,7 +471,13 @@ def run(
         current_system_number += group
 
         # layout the systems
-        layout_systems(systems, staves, writer, page_layout)
+        layout_systems(
+            systems,
+            staves,
+            writer,
+            page_layout,
+            True if index == groups_count - 1 else False
+         )
 
     # write to disk
     print(output)
