@@ -134,6 +134,8 @@ def groups_callback(score: PdfReader, groups: Optional[List[int]]) -> Optional[L
 def staves_parser(staves_count: int) -> PageObject:
     """
     Fetches the correct empty staves pdf from the resources.
+
+    Valid counts are 0...6
     """
     staves_path = os.path.join(
         os.path.dirname(__file__), "resources", "empty-%d.pdf" % int(staves_count)
@@ -297,10 +299,10 @@ def run(
         typer.Option(
             "--staves",
             "-s",
-            min=1,
+            min=0,
             max=6,
             clamp=True,
-            help="Number of staves to add.",
+            help="Number of staves to add (0...6).",
             metavar="NUMBER",
             rich_help_panel="Configuration",
             parser=staves_parser,
