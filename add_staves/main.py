@@ -234,7 +234,11 @@ def layout_systems(
     # iterate over the systems and add them to the current_page
     for system in systems:
         # add the system
-        current_page.merge_translated_page(system, 0, height - system.cropbox.top)
+        current_page.merge_translated_page(
+            system,
+            (PaperSize.A4.width - system.cropbox.width) / 2,
+            height - system.cropbox.top
+        )
         height -= system.cropbox.height
 
         # add bottom_padding
