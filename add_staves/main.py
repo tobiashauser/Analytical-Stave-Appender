@@ -13,7 +13,7 @@ from rich import print
 app = typer.Typer(rich_markup_mode="rich", add_completion=False)
 
 
-__version__ = "0.1.1"
+__version__ = "0.2"
 
 
 @dataclass
