@@ -1,8 +1,8 @@
 [tool.poetry]
 name = "add_staves"
-version = "0.2.1"
+version = "0.2.2"
 description = "Add empty staves for your analysis to your score."
-authors = ["Your Name <you@example.com>"]
+authors = ["Tobias Hauser <git@tobiashauser.org>"]
 readme = "README.md"
 include = ["resources/*"]
 license = "MIT"
