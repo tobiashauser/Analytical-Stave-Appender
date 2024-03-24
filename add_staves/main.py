@@ -236,7 +236,9 @@ def layout_systems(
         # add the system
         current_page.merge_translated_page(
             system,
-            (PaperSize.A4.width - system.cropbox.width) / 2,
+            # layout ends up beeing too far to the right
+            # (PaperSize.A4.width - system.cropbox.width) / 2,
+            0,
             height - system.cropbox.top
         )
         height -= system.cropbox.height
