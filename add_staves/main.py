@@ -12,7 +12,8 @@ from rich import print
 # The CLI app
 app = typer.Typer(rich_markup_mode="rich", add_completion=False)
 
-
+# The version of the tool
+# needs to be updated manually
 __version__ = "0.2.2"
 
 
@@ -31,9 +32,18 @@ class PageLayout:
     ragged_bottom: bool
     ragged_bottom_last: bool
     minimum_height: float = PaperSize.A4.height
+    left_margin: int = 30
+    right_margin: int = 30
 
     def calculate_stave_height(self) -> float:
         return self.stave_height + self.bottom_padding + self.top_padding
+
+    @property
+    def printable_width(self) -> float:
+        """
+        Calculates the width of the printable area.
+        """
+        return PaperSize.A4.width - self.left_margin - self.right_margin
 
 
 def version_callback(value: bool):
@@ -437,12 +447,15 @@ def run(
 
     if groups is None:
         # Fit systems on A4 page
-
         height = page_layout.top_margin + page_layout.bottom_margin
 
         current_group_size = 0
         groups = []
         for system in score.pages:
+            # Scale the system if it exceeds the width of a DIN A4 page
+            if system.cropbox.width > page_layout.printable_width:
+                system.scale_by(page_layout.printable_width / system.cropbox.width)
+
             new_height = system.cropbox.height
             new_height += page_layout.calculate_stave_height()
 
