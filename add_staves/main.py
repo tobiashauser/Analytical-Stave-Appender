@@ -14,7 +14,7 @@ app = typer.Typer(rich_markup_mode="rich", add_completion=False)
 
 # The version of the tool
 # needs to be updated manually
-__version__ = "0.2.2"
+__version__ = "0.2.3"
 
 
 @dataclass
