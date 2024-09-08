@@ -67,3 +67,17 @@ def test_zwerg_a4_ragged_bottom(request):
 
     # Diff the output with the expectation
     diff(output, expectation)
+
+    
+def test_wagner_träume(request):
+    """
+    Test
+    """
+    input = Path(request.config.rootdir / "tests/input/test_wagner_träume.pdf")
+    output = Path(request.config.rootdir / "tests/output/test_wagner_träume.pdf")
+    expectation = Path(request.config.rootdir / "tests/expectation/test_wagner_träume.pdf")
+
+    result = runner.invoke(app, ["--output=" + str(output), str(input)])
+    assert result.exit_code == 0
+
+    diff(output, expectation)
