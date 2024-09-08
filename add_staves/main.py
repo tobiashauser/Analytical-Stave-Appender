@@ -14,7 +14,7 @@ app = typer.Typer(rich_markup_mode="rich", add_completion=False)
 
 # The version of the tool
 # needs to be updated manually
-__version__ = "0.2.3"
+__version__ = "0.2.4"
 
 
 @dataclass
@@ -31,6 +31,7 @@ class PageLayout:
     stave_height: float
     ragged_bottom: bool
     ragged_bottom_last: bool
+    horizontal_shift: int
     minimum_height: float = PaperSize.A4.height
     left_margin: int = 30
     right_margin: int = 30
@@ -248,7 +249,7 @@ def layout_systems(
             system,
             # layout ends up beeing too far to the right
             # (PaperSize.A4.width - system.cropbox.width) / 2,
-            0,
+            0 + page_layout.horizontal_shift,
             height - system.cropbox.top
         )
         height -= system.cropbox.height
@@ -400,6 +401,14 @@ def run(
             is_flag=True
         )
     ] = True,
+    shift: Annotated[
+        int,
+        typer.Option(
+            rich_help_panel="Page Layout",
+            help="Manually shift the staves horizontally.",
+            metavar="NUMBER",
+        )
+    ] = 0,
 ):
     """
     Add analytical staves to a score.
@@ -439,7 +448,8 @@ def run(
         bottom_padding=bottom_padding,
         ragged_bottom=ragged_bottom,
         ragged_bottom_last=ragged_bottom_last,
-        stave_height=staves.cropbox.height
+        stave_height=staves.cropbox.height,
+        horizontal_shift=shift,
     )
 
     # the PdfWriter to build the output file
@@ -455,7 +465,7 @@ def run(
             # Scale the system if it exceeds the width of a DIN A4 page
             if system.cropbox.width > page_layout.printable_width:
                 system.scale_by(page_layout.printable_width / system.cropbox.width)
-
+                
             new_height = system.cropbox.height
             new_height += page_layout.calculate_stave_height()
 

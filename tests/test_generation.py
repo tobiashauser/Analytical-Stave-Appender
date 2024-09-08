@@ -77,7 +77,7 @@ def test_wagner_träume(request):
     output = Path(request.config.rootdir / "tests/output/test_wagner_träume.pdf")
     expectation = Path(request.config.rootdir / "tests/expectation/test_wagner_träume.pdf")
 
-    result = runner.invoke(app, ["--output=" + str(output), str(input)])
+    result = runner.invoke(app, ["--output=" + str(output), str(input), "--shift=-100"])
     assert result.exit_code == 0
 
     diff(output, expectation)
