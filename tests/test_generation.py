@@ -71,7 +71,7 @@ def test_zwerg_a4_ragged_bottom(request):
     
 def test_wagner_träume(request):
     """
-    Test
+    Test the option to horizontally shift the systems.
     """
     input = Path(request.config.rootdir / "tests/input/test_wagner_träume.pdf")
     output = Path(request.config.rootdir / "tests/output/test_wagner_träume.pdf")
